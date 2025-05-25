@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -9,7 +8,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/components/ui/use-toast';
 
 const Index = () => {
-  const [isSignUp, setIsSignUp] = useState(false); // Changed from true to false
+  const [isSignUp, setIsSignUp] = useState(true); // Changed back to true for sign up default
   const [emailOrPhone, setEmailOrPhone] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
