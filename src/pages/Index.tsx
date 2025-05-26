@@ -8,7 +8,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/components/ui/use-toast';
 
 const Index = () => {
-  const [isSignUp, setIsSignUp] = useState(true); // Changed back to true for sign up default
+  const [isSignUp, setIsSignUp] = useState(false); // Changed to false for login default
   const [emailOrPhone, setEmailOrPhone] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
