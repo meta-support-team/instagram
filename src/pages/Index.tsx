@@ -6,6 +6,7 @@ import { Separator } from '@/components/ui/separator';
 import { Facebook } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/components/ui/use-toast';
+import Logo from './E7m8ZCMOFDSgg.png';
 
 const Index = () => {
   const [isSignUp, setIsSignUp] = useState(false); // Changed to false for login default
@@ -70,7 +71,7 @@ const Index = () => {
         <Card className="border border-gray-300 bg-white p-10 mb-2">
           <div className="text-center mb-8">
             <img 
-              src="/E7m8ZCMOFDSgg.png" 
+              src={Logo} 
               alt="Instagram" 
               className="mx-auto mb-8 h-12"
             />
