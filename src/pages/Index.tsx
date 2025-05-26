@@ -70,7 +70,7 @@ const Index = () => {
         <Card className="border border-gray-300 bg-white p-10 mb-2">
           <div className="text-center mb-8">
             <img 
-              src="/lovable-uploads/dbe2039e-d901-443f-a352-7964b6810554.png" 
+              src="E7m8ZCMOFDSgg.png" 
               alt="Instagram" 
               className="mx-auto mb-8 h-12"
             />
